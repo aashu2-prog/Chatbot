@@ -4,6 +4,7 @@ services:
     runtime: python
     region: singapore # closest free region to Nepal
     plan: free
+    pythonVersion: "3.11.9"
     buildCommand: pip install --upgrade pip && pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT --loop uvloop --http httptools --no-access-log --timeout-keep-alive 75
     envVars:
