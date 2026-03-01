@@ -6,6 +6,7 @@ from groq import Groq
 from dotenv import load_dotenv
 import json
 
+
 load_dotenv(dotenv_path="../.env")
 
 app = FastAPI(title="MedSathy API")
