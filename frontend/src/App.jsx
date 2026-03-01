@@ -11,6 +11,11 @@ export default function App() {
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
 
+  // Warm up the backend on page load to reduce cold start delay
+  useEffect(() => {
+    fetch(API_URL.replace("/chat", "/health")).catch(() => {});
+  }, []);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
