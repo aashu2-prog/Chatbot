@@ -37,11 +37,16 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 
-_api_key = os.environ.get("OPENAI_API_KEY")
+_api_key = os.environ.get("GROQ_API_KEY")
 if not _api_key:
-    raise RuntimeError("OPENAI_API_KEY is not set")
+    raise RuntimeError("GROQ_API_KEY is not set")
 
-client = OpenAI(api_key=_api_key, timeout=30.0, max_retries=2)
+client = OpenAI(
+    api_key=_api_key,
+    base_url="https://api.groq.com/openai/v1",
+    timeout=30.0,
+    max_retries=2,
+)
 
 SYSTEM_PROMPT = {
     "role": "system",
@@ -139,7 +144,7 @@ def stream_response(messages: list[Message]):
     full_messages = [SYSTEM_PROMPT] + [m.model_dump() for m in messages]
     try:
         completion = client.chat.completions.create(
-            model="gpt-4o",
+            model="llama-3.3-70b-versatile",
             messages=full_messages,
             temperature=0.3,       # Low temp for consistent, accurate medical info
             max_tokens=2048,       # Enough for detailed dose calculations
@@ -186,5 +191,5 @@ def chat(request: ChatRequest):
 
 @app.get("/health")
 def health():
-    key_set = bool(os.environ.get("OPENAI_API_KEY"))
-    return {"status": "ok", "model": "gpt-4o", "api_key_set": key_set}
+    key_set = bool(os.environ.get("GROQ_API_KEY"))
+    return {"status": "ok", "model": "llama-3.3-70b-versatile", "api_key_set": key_set}
