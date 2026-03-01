@@ -1,5 +1,13 @@
-venv/  # NOT SHAREABLE - create your own with: python -m venv venv
+venv/
 .env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# Claude
+.claude/
+
 # Python
 __pycache__/
 *.pyc
