@@ -20,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = Groq(api_key="Yesma api key rakha")
+client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 SYSTEM_PROMPT = {
     "role": "system",
