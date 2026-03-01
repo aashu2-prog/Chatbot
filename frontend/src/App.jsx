@@ -21,9 +21,14 @@ export default function App() {
   const inputRef = useRef(null);
   const abortRef = useRef(null);
 
-  // Warm up backend on load
+  // Warm up backend on load + keep-alive ping every 14 min while app is open
   useEffect(() => {
     fetch(HEALTH_URL).catch(() => {});
+    const id = setInterval(
+      () => fetch(HEALTH_URL).catch(() => {}),
+      14 * 60 * 1000,
+    );
+    return () => clearInterval(id);
   }, []);
 
   // Scroll to bottom on new messages

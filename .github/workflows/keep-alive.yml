@@ -1,0 +1,21 @@
+name: Keep Render Backend Awake
+
+on:
+  schedule:
+    # Runs every 14 minutes — prevents Render free tier from sleeping
+    - cron: "*/14 * * * *"
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping /health
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 https://chatbot-e66j.onrender.com/health)
+          echo "Response: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "Warning: backend returned HTTP $STATUS"
+            exit 1
+          fi
+          echo "Backend is alive ✓"
