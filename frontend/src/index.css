@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 *,
 *::before,
 *::after {
@@ -7,18 +9,34 @@
 }
 
 :root {
-  --bg: #ffffff;
-  --surface: #f6f8fa;
-  --surface2: #eaeef2;
-  --border: #d0d7de;
-  --green: #1a7f37;
-  --green-dim: #2da44e;
-  --green-bg: #dafbe1;
+  /* ── Palette: The Spruce × MedSathy ── */
+  --teal: #3d9191; /* Deep Teal    — primary accent (darkened for light bg) */
+  --mint: #5cb8a8; /* Mint Green   — secondary accent                     */
+  --lime: #7a8c1e; /* Lime Green   — energy / badges (darkened)            */
+  --gold: #9e8b1a; /* Muted Gold   — strong text (darkened for contrast)   */
+  --periwinkle: #4a6ea8; /* Periwinkle   — user bubbles / calm (darkened)        */
+
+  /* ── GitHub Light canvas ── */
+  --bg: #ffffff; /* page canvas          */
+  --surface: #f6f8fa; /* header / input area  */
+  --surface2: #eaeef2; /* chips / hover states */
+  --border: #d0d7de; /* dividers             */
+
+  /* ── Semantic aliases (used by components) ── */
+  --green: var(--teal);
+  --green-dim: var(--mint);
+  --green-bg: rgba(61, 145, 145, 0.08);
+  --accent-gold-bg: rgba(158, 139, 26, 0.08);
+
+  /* ── GitHub Light text ── */
   --text: #1f2328;
   --text-muted: #57606a;
-  --user-bg: #ddf4ff;
-  --user-border: #54aeff;
-  --radius: 14px;
+
+  /* ── User bubble — periwinkle tint ── */
+  --user-bg: rgba(74, 110, 168, 0.07);
+  --user-border: rgba(74, 110, 168, 0.22);
+
+  --radius: 16px;
 }
 
 html,
@@ -26,6 +44,7 @@ body,
 #root {
   height: 100%;
   font-family:
+    "Inter",
     "Segoe UI",
     system-ui,
     -apple-system,
@@ -34,6 +53,54 @@ body,
   color: var(--text);
   color-scheme: light;
   font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typescale ── */
+h1 {
+  font-size: 3.815rem;
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-size: 3.052rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+h3 {
+  font-size: 2.441rem;
+  line-height: 1.25;
+  font-weight: 600;
+}
+h4 {
+  font-size: 1.953rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+h5 {
+  font-size: 1.563rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+h6 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+p {
+  font-size: 1rem;
+  line-height: 1.7;
+}
+small,
+.text-sm {
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.text-xs {
+  font-size: 0.64rem;
+  line-height: 1.5;
 }
 
 /* ── Typescale ── */
