@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel
-from openai import OpenAI, OpenAIError, AuthenticationError, RateLimitError, APIConnectionError
+from groq import Groq, APIError, AuthenticationError, RateLimitError, APIConnectionError
 from dotenv import load_dotenv
 import json
 import os
@@ -41,12 +41,7 @@ _api_key = os.environ.get("GROQ_API_KEY")
 if not _api_key:
     raise RuntimeError("GROQ_API_KEY is not set")
 
-client = OpenAI(
-    api_key=_api_key,
-    base_url="https://api.groq.com/openai/v1",
-    timeout=30.0,
-    max_retries=2,
-)
+client = Groq(api_key=_api_key)
 
 SYSTEM_PROMPT = {
     "role": "system",
@@ -157,16 +152,16 @@ def stream_response(messages: list[Message]):
             if content:
                 yield f"data: {json.dumps({'content': content})}\n\n"
     except AuthenticationError as e:
-        logger.error(f"OpenAI AuthenticationError: {e}")
-        yield f"data: {json.dumps({'content': '⚠️ API key error: The OpenAI API key is invalid or expired. Please contact the admin.'})}\n\n"
+        logger.error(f"Groq AuthenticationError: {e}")
+        yield f"data: {json.dumps({'content': '⚠️ API key error: The Groq API key is invalid or expired. Please contact the admin.'})}\n\n"
     except RateLimitError as e:
-        logger.error(f"OpenAI RateLimitError: {e}")
-        yield f"data: {json.dumps({'content': '⚠️ Rate limit reached: Too many requests or OpenAI quota exceeded. Please wait a moment and try again.'})}\n\n"
+        logger.error(f"Groq RateLimitError: {e}")
+        yield f"data: {json.dumps({'content': '⚠️ Rate limit reached: Too many requests or Groq quota exceeded. Please wait a moment and try again.'})}\n\n"
     except APIConnectionError as e:
-        logger.error(f"OpenAI APIConnectionError: {e}")
-        yield f"data: {json.dumps({'content': '⚠️ Connection error: Could not reach OpenAI. Please check your internet connection and try again.'})}\n\n"
-    except OpenAIError as e:
-        logger.error(f"OpenAI error ({type(e).__name__}): {e}")
+        logger.error(f"Groq APIConnectionError: {e}")
+        yield f"data: {json.dumps({'content': '⚠️ Connection error: Could not reach Groq. Please check your internet connection and try again.'})}\n\n"
+    except APIError as e:
+        logger.error(f"Groq error ({type(e).__name__}): {e}")
         yield f"data: {json.dumps({'content': f'⚠️ Sorry, an error occurred ({type(e).__name__}). Please try again.'})}\n\n"
     finally:
         yield "data: [DONE]\n\n"
