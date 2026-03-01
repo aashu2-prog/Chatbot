@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from groq import Groq
 from dotenv import load_dotenv
 import json
+import os
 
 
 load_dotenv(dotenv_path="../.env")
@@ -19,7 +20,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = Groq()
+client = Groq(api_key="Yesma api key rakha")
 
 SYSTEM_PROMPT = {
     "role": "system",
