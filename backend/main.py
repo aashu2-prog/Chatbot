@@ -8,13 +8,18 @@ import json
 import os
 
 
-load_dotenv(dotenv_path="../.env")
+load_dotenv(dotenv_path="../.env")  # local dev only; Vercel uses env vars from dashboard
 
 app = FastAPI(title="MedSathy API")
 
+ALLOWED_ORIGINS = os.environ.get(
+    "ALLOWED_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
