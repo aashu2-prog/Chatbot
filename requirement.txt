@@ -1,0 +1,11 @@
+groq
+# Environment Variable Management
+python-dotenv
+
+# Web API (backend)
+fastapi
+uvicorn[standard]
+
+# Machine Learning Utilities
+numpy
+scikit-learn

@@ -1,0 +1,82 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #ffffff;
+  --surface: #f6f8fa;
+  --surface2: #eaeef2;
+  --border: #d0d7de;
+  --green: #1a7f37;
+  --green-dim: #2da44e;
+  --green-bg: #dafbe1;
+  --text: #1f2328;
+  --text-muted: #57606a;
+  --user-bg: #ddf4ff;
+  --user-border: #54aeff;
+  --radius: 14px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  color-scheme: light;
+  font-size: 1rem;
+}
+
+/* ── Typescale ── */
+h1 {
+  font-size: 3.815rem;
+  line-height: 1.15;
+  font-weight: 700;
+}
+h2 {
+  font-size: 3.052rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+h3 {
+  font-size: 2.441rem;
+  line-height: 1.25;
+  font-weight: 600;
+}
+h4 {
+  font-size: 1.953rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+h5 {
+  font-size: 1.563rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+h6 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+p {
+  font-size: 1rem;
+  line-height: 1.65;
+}
+small,
+.text-sm {
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+.text-xs {
+  font-size: 0.64rem;
+  line-height: 1.5;
+}
