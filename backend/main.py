@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel
-from openai import OpenAI, OpenAIError
+from openai import OpenAI, OpenAIError, AuthenticationError, RateLimitError, APIConnectionError
 from dotenv import load_dotenv
 import json
 import os
@@ -151,9 +151,18 @@ def stream_response(messages: list[Message]):
             content = chunk.choices[0].delta.content or ""
             if content:
                 yield f"data: {json.dumps({'content': content})}\n\n"
+    except AuthenticationError as e:
+        logger.error(f"OpenAI AuthenticationError: {e}")
+        yield f"data: {json.dumps({'content': '⚠️ API key error: The OpenAI API key is invalid or expired. Please contact the admin.'})}\n\n"
+    except RateLimitError as e:
+        logger.error(f"OpenAI RateLimitError: {e}")
+        yield f"data: {json.dumps({'content': '⚠️ Rate limit reached: Too many requests or OpenAI quota exceeded. Please wait a moment and try again.'})}\n\n"
+    except APIConnectionError as e:
+        logger.error(f"OpenAI APIConnectionError: {e}")
+        yield f"data: {json.dumps({'content': '⚠️ Connection error: Could not reach OpenAI. Please check your internet connection and try again.'})}\n\n"
     except OpenAIError as e:
-        logger.error(f"OpenAI error: {e}")
-        yield f"data: {json.dumps({'content': '⚠️ Sorry, an error occurred. Please try again.'})}\n\n"
+        logger.error(f"OpenAI error ({type(e).__name__}): {e}")
+        yield f"data: {json.dumps({'content': f'⚠️ Sorry, an error occurred ({type(e).__name__}). Please try again.'})}\n\n"
     finally:
         yield "data: [DONE]\n\n"
 
@@ -177,4 +186,5 @@ def chat(request: ChatRequest):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "model": "gpt-4o"}
+    key_set = bool(os.environ.get("OPENAI_API_KEY"))
+    return {"status": "ok", "model": "gpt-4o", "api_key_set": key_set}
