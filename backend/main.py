@@ -2,13 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from groq import Groq
+from openai import OpenAI
 from dotenv import load_dotenv
 import json
 import os
 
 
-load_dotenv(dotenv_path="../.env")  # local dev only; Vercel uses env vars from dashboard
+load_dotenv(dotenv_path="../.env")  # local dev only; Render uses env vars from dashboard
 
 app = FastAPI(title="MedSathy API")
 
@@ -25,7 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 SYSTEM_PROMPT = {
     "role": "system",
@@ -199,13 +199,12 @@ class ChatRequest(BaseModel):
 def stream_response(messages: list[Message]):
     full_messages = [SYSTEM_PROMPT] + [m.model_dump() for m in messages]
     completion = client.chat.completions.create(
-        model="meta-llama/llama-4-scout-17b-16e-instruct",
+        model="gpt-4o",
         messages=full_messages,
         temperature=1,
-        max_completion_tokens=1024,
+        max_tokens=1024,
         top_p=1,
         stream=True,
-        stop=None,
     )
     for chunk in completion:
         content = chunk.choices[0].delta.content or ""
@@ -228,4 +227,4 @@ def chat(request: ChatRequest):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "model": "MedSathy"}
+    return {"status": "ok", "model": "MedSathy (gpt-4o)"}
